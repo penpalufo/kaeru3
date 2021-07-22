@@ -4,6 +4,7 @@ _app = {
 	 * ウィンドウの縦横比に合わせてキャンバスサイズを変更する
 	 * ゲームの縦横比より横長なら横を短く、縦長なら縦を短く
 	 */
+
 	resize: function(){
 		let canvas = document.querySelector("canvas");
 		let windowWidth  = window.innerWidth;
@@ -19,7 +20,4 @@ _app = {
 			canvas.style.height = windowHeight + "px";
 		}
 	},
-
-
-aaa
 };
