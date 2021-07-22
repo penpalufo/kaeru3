@@ -12,7 +12,7 @@ _app = {
 		let windowRatio  = windowWidth / windowHeight;
 		let gameRatio    = game.config.width / game.config.height;
 
-		if(windowRatio < gameRatio){
+		if (windowRatio < gameRatio){
 			canvas.style.width  = windowWidth + "px";
 			canvas.style.height = (windowWidth / gameRatio) + "px";
 		}else{
@@ -20,4 +20,9 @@ _app = {
 			canvas.style.height = windowHeight + "px";
 		}
 	},
+
+	rnd: function(val, offset){
+		return Math.floor(Math.random() * val) + offset;
+	},
+
 };

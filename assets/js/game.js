@@ -47,7 +47,6 @@ window.onload = function() {
 
 
 
-
 /*
  |
  |
@@ -69,12 +68,10 @@ class preload_Game extends Phaser.Scene{
 
 	preload(){
 		console.log('preload_Game | preload()');
-		this.load.spritesheet('player', './assets/img/kaeru/kaeru_anim_2.png', { frameWidth: 120, frameHeight: 108 });
+		this.load.spritesheet('player',   './assets/img/kaeru/kaeru.png', 	{ frameWidth: 120, frameHeight: 108 });
+		this.load.spritesheet('mizukusa', './assets/img/kaeru/mizukusa.png',{ frameWidth: 158, frameHeight: 311 });
 		this.load.image('shadow', 	'./assets/img/kaeru/shadow.png');
 		this.load.image('bear', 	'./assets/img/animals/bear.png');
-		this.load.image('cow',  	'./assets/img/animals/cow.png');
-		this.load.image('narwhal', 	'./assets/img/animals/narwhal.png');
-		this.load.image('pig', 		'./assets/img/animals/pig.png');
 	}
 
 
@@ -87,10 +84,18 @@ class preload_Game extends Phaser.Scene{
 
 		console.log('preload_Game | create()');
 
-		// カエル
+		// プレイヤーのカエル
 		this.anims.create({
 			key: "swim",
 			frames: this.anims.generateFrameNumbers("player", { start: 0, end: 11 }),
+			frameRate: 8,
+			repeat: -1
+		});
+
+		// 水草
+		this.anims.create({
+			key: "yurayura",
+			frames: this.anims.generateFrameNumbers("mizukusa", { start: 0, end: 47 }),
 			frameRate: 8,
 			repeat: -1
 		});
@@ -101,7 +106,6 @@ class preload_Game extends Phaser.Scene{
 
 
 }
-
 
 
 
@@ -128,46 +132,50 @@ class play_Game extends Phaser.Scene{
 
 		console.log('play_Game | create()');
 
-		var rndX = function(){
-			return Math.floor(Math.random() * game.config.width);
-		}
+		// -- 水草
+		this.kusas = this.physics.add.group({
+			key: 'mizukusa',
+			quantity: 10,
+		});
 
-		var rndY = function(){
-			return Math.floor(Math.random() * game.config.height);
-		}
+		this.kusas.children.iterate(function(child){
+			child.setX(_app.rnd(game.config.width, 0));
+			child.setY(_app.rnd(game.config.height, 0));
+			child.play('yurayura'); // アニメ再生
+			child.setScale((_app.rnd(5, 0) + 5) * 0.1);
+	    });
 
+		// -- プレイヤーの衝突範囲用スプライト
 		this.shadow = this.physics.add.sprite(187, 333, "shadow");
 		this.shadow.setScale(0.35);
 
+		// -- プレイヤーのカエル
 		this.player = this.physics.add.sprite(187, 333, "player");
 		this.player.anims.play("swim");
 		this.player.setScale(0.5);
 
-		// マウスに追従
+		// -- プレイヤーをマウスに追従させる
 		this.input.on('pointermove', function (pointer){
 			this.physics.moveToObject(this.player, pointer, 200);
 		}, this);
 
-
-
-		// -- GROUP:bears
-
+		// -- 熊グループ
 		this.bears = this.physics.add.group({
 			key: 'bear',
 			quantity: 10,
-			bounceX: 1,
-			bounceY: 1,
-			//collideWorldBounds: true,
+			// bounceX: 1,
+			// bounceY: 1,
+			// collideWorldBounds: true,
 		});
 
 		this.bears.children.iterate(function(child){
-			child.setX(rndX());
-			child.setY(rndY() + game.config.height);
-			var rnd = Math.floor(Math.random() * 200) + 50;
-			child.setVelocityY(rnd * -1);
+			child.setX(_app.rnd(game.config.width, 0));
+			child.setY(_app.rnd(game.config.height, 0) + game.config.height);
+			child.setVelocityY(_app.rnd(200, 50) * -1);
 			child.setScale(0.5);
 	    });
 
+		// -- 衝突
 		this.physics.add.overlap(
 			this.shadow,
 			this.bears,
@@ -178,47 +186,6 @@ class play_Game extends Phaser.Scene{
 			}
 		);
 
-		/*
-		// -- GROUP:cows
-
-		this.cows = this.physics.add.group({
-			key: 'cow',
-			quantity: 10,
-			bounceX: 1,
-			bounceY: 1,
-			//collideWorldBounds: true,
-		});
-
-		this.cows.children.iterate(function(child){
-			child.setY(rndY());
-			var rnd = Math.floor(Math.random() * 500) + 50;
-			child.setVelocityX(rnd);
-			child.setScale(0.5);
-	    });
-	    */
-
-		/*
-		this.physics.add.collider(
-			this.bears,
-			this.cows,
-			function (bear, cows){
-				console.log('衝突');
-				// bear.setAlpha(0.5);
-				// cows.setAlpha(0.5);
-			}
-		);
-		*/
-
-		/*
-		this.physics.add.overlap(
-			this.bears,
-			this.cows,
-			function (bear, cow){
-				console.log('衝突');
-
-			}
-		);
-		*/
 	}
 
 
