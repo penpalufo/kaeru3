@@ -160,7 +160,10 @@ class play_Game extends Phaser.Scene{
 
 		// -- プレイヤーをマウスに追従させる
 		this.input.on('pointermove', function (pointer){
-			this.physics.moveToObject(this.player, pointer, 200);
+			//console.log(pointer.x + ' : ' + this.player.x);
+			//this.physics.moveToObject(this.player, pointer, 200);
+			let velocity =  pointer.x - this.player.x;
+			this.player.setVelocity(velocity);
 		}, this);
 
 		// -- 熊グループ
@@ -172,8 +175,8 @@ class play_Game extends Phaser.Scene{
 			// collideWorldBounds: true,
 		});
 
-		var ini_bears = function(_obj){
-			_obj.children.iterate(function(child){
+		let ini_bears = () => {
+			this.bears.children.iterate(function(child){
 				child.setX(_app.rnd(game.config.width, 0));
 				child.setY(_app.rnd(game.config.height, 0) + game.config.height);
 				child.setVelocityY(_app.rnd(200, 50) * -1);
@@ -181,7 +184,7 @@ class play_Game extends Phaser.Scene{
 		    });
 		}
 
-		ini_bears(this.bears);
+		ini_bears();
 
 
 		// -- 衝突
@@ -191,8 +194,8 @@ class play_Game extends Phaser.Scene{
 			function (player, bear){
 				console.log('衝突');
 				//game.scene.pause("play_Game")
-				// ini_bears();
-				bear.setY(_app.rnd(game.config.height, 0) + game.config.height);
+				ini_bears();
+				//bear.setY(_app.rnd(game.config.height, 0) + game.config.height);
 				_opt.kaeruY += 30;
 			}
 		);
