@@ -1,6 +1,10 @@
 console.log('test-03.js');
 let game;	// ゲームインスタンス
 
+let _opt = {
+	kaeruY: 100,
+}
+
 
 
 /*
@@ -168,12 +172,17 @@ class play_Game extends Phaser.Scene{
 			// collideWorldBounds: true,
 		});
 
-		this.bears.children.iterate(function(child){
-			child.setX(_app.rnd(game.config.width, 0));
-			child.setY(_app.rnd(game.config.height, 0) + game.config.height);
-			child.setVelocityY(_app.rnd(200, 50) * -1);
-			child.setScale(0.5);
-	    });
+		var ini_bears = function(_obj){
+			_obj.children.iterate(function(child){
+				child.setX(_app.rnd(game.config.width, 0));
+				child.setY(_app.rnd(game.config.height, 0) + game.config.height);
+				child.setVelocityY(_app.rnd(200, 50) * -1);
+				child.setScale(0.5);
+		    });
+		}
+
+		ini_bears(this.bears);
+
 
 		// -- 衝突
 		this.physics.add.overlap(
@@ -181,8 +190,10 @@ class play_Game extends Phaser.Scene{
 			this.bears,
 			function (player, bear){
 				console.log('衝突');
-				// game.play_Game.pause();
-				game.scene.pause("play_Game")
+				//game.scene.pause("play_Game")
+				// ini_bears();
+				bear.setY(_app.rnd(game.config.height, 0) + game.config.height);
+				_opt.kaeruY += 30;
 			}
 		);
 
@@ -193,6 +204,8 @@ class play_Game extends Phaser.Scene{
 	 * update
 	 */
 	update(){
+
+		this.player.y = _opt.kaeruY;
 
 		// Playerとマウスポインタ（game.input.activePointer）の距離
 		this.dist = Phaser.Math.Distance.BetweenPoints(this.player, this.input.activePointer);
