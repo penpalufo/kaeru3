@@ -1,28 +1,125 @@
-<!DOCTYPE html>
-<html>
-	<!--
-	http://localhost/phaser3/kaeru3/
-	https://github.com/penpalufo/kaeru3/
-	https://penpalufo.github.io/kaeru3/
-	http://sp-file.oops.jp/game/kaeru3/
-	-->
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<!doctype html>
+<html lang="ja">
+<!--
+http://localhost/phaser3/kaeru3/
+https://github.com/penpalufo/kaeru3/
+https://penpalufo.github.io/kaeru3/
 
-		<!-- css -->
-		<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
-		<link type="text/css" rel="stylesheet" href="./common/css/game.css">
+-->
+<head>
+	<meta charset="utf-8">
+	<title>kaeru3</title>
 
-		<!-- js -->
-		<script src="./common/js/app.js"></script>
-		<script src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
-		<script src="./assets/js/game.js"></script>
-		<script>
-			const ver = '3.1.7';
-		</script>
-	</head>
+	<!-- Bootstrap & jQuery -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 
-	<body></body>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+
+	<!-- highlight.js  -->
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/railscasts.min.css">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script>
+	<script>
+		hljs.configure({ tabReplace: '    ' }) // スペース4つ
+		hljs.initHighlightingOnLoad();
+		$(function(){
+
+		});
+	</script>
+
+	<!-- css  -->
+	<style>
+		article{ margin-bottom: 80px; }
+		h1{ padding-bottom: 20px; }
+		input[type="text"]{ width:400px }
+		#result{
+			border:solid 3px red;
+			padding: 20px;
+		}
+
+		#result p{
+			background: red;
+			padding: 10px;
+			font-weight: bold;
+			color: #fff;
+		}
+	</style>
+</head>
+
+<body>
+<div class="container">
+
+	<h1>kaeru3</h1>
+
+	<!-- 公開用 -->
+	<article>
+		<h3>■ 公開用</h3>
+		<p><a href="https://penpalufo.github.io/kaeru3/dist.html" target="_blank" class="btn btn-primary" role="button">dist</a></p>
+
+	</article>
+
+
+	<!-- テスト： -->
+	<article>
+		<h3>■ 左右ボタンで自機移動</h3>
+		<p><a href="https://penpalufo.github.io/kaeru3/btn.html" target="_blank" class="btn btn-primary" role="button">btn</a></p>
+
+<pre><code>create(){
+	// -- 左右ボタンのスプライト定義
+	this.btn_left  = this.physics.add.sprite(147, 600, "left");
+	this.btn_right = this.physics.add.sprite(228, 600, "right");
+	// -- プレイヤーのカエル
+	this.player = this.physics.add.sprite(187, 100, "player");
+	this.player.anims.play("swim");
+	// -- 左右ボタンが押されたら
+	this.btn_left.setInteractive().on('pointerdown', ()=>{
+		this.player.x -= 40;
+	});
+	this.btn_right.setInteractive().on('pointerdown', ()=>{
+		this.player.x += 40;
+	});
+}
+</code></pre>
+
+	</article>
+
+
+
+	<!-- テスト： -->
+	<article>
+		<h3>■ 左右ボタンを押しているあいだ自機移動</h3>
+		<p><a href="https://penpalufo.github.io/kaeru3/btn-velocity.html" target="_blank" class="btn btn-primary" role="button">btn-velocity</a></p>
+
+<pre><code>create(){
+	// -- 左右ボタンのスプライト定義
+	this.btn_left  = this.physics.add.sprite(147, 600, "left");
+	this.btn_right = this.physics.add.sprite(228, 600, "right");
+	// -- プレイヤーのカエル
+	this.player = this.physics.add.sprite(187, 100, "player");
+	this.player.anims.play("swim");
+	// -- 左右ボタンが押されたら（pointerdown）
+	this.btn_left.setInteractive().on('pointerdown', () => {
+		this.player.setVelocityX(-200);
+	});
+	this.btn_right.setInteractive().on('pointerdown', () => {
+		this.player.setVelocityX(200);
+	});
+	// -- 左右ボタンが離れたら（pointerup）
+	this.btn_left.setInteractive().on('pointerup', () => {
+		this.player.setVelocityX(0);
+	})
+	this.btn_right.setInteractive().on('pointerup', () => {
+		this.player.setVelocityX(0);
+	})
+}
+</code></pre>
+
+	</article>
+
+
+</div>
+</body>
+
+
 
 </html>
