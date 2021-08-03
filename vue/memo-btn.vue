@@ -38,7 +38,7 @@ module.exports = {
 			category: 'Memo',
 			title: 'ボタンで自機移動',
 			source_name: 'btn',
-			source_url: prev_url + 'btn',
+			source_url: './preview.html#' + 'btn',
 		}
 	},
 	created: function(){

@@ -26,7 +26,7 @@ module.exports = {
 			category: 'Top',
 			title: 'Kaeru3',
 			source_name: 'dist',
-			source_url: prev_url + 'dist',
+			source_url: './preview.html#' + 'dist',
 		}
 	},
 	created: function(){

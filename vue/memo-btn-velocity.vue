@@ -47,7 +47,7 @@ module.exports = {
 			category: 'Memo',
 			title: 'ボタンを押しているあいだ自機移動',
 			source_name: 'btn-velocity',
-			source_url: prev_url + 'btn-velocity',
+			source_url: './preview.html#' + 'btn-velocity',
 		}
 	},
 	created: function(){
