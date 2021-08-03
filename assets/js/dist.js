@@ -1,4 +1,7 @@
-console.log('test-03.js');
+/*
+ * dist.js
+ */
+
 let game;	// ゲームインスタンス
 
 let _opt = {

@@ -25,4 +25,11 @@ _app = {
 		return Math.floor(Math.random() * val) + offset;
 	},
 
+	is_local: function(){
+		let local = true;
+		if (document.domain == 'localhost') local = false;
+
+		return local;
+	},
+
 };
