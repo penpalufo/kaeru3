@@ -8,11 +8,7 @@
 		<h4>■ {{ title }}</h4>
 		<p><a v-bind:href="source_url" target="_blank" class="btn btn-primary" role="button">preview : {{ source_name }}</a></p>
 
-<pre><code>create(){
-	// -- 左右ボタンのスプライト定義
-	this.btn_left  = this.physics.add.sprite(147, 600, "left");
-	this.btn_right = this.physics.add.sprite(228, 600, "right");
-}
+<pre><code>
 </code></pre>
 
 	</article>
@@ -24,7 +20,7 @@ module.exports = {
 	data: function() {
 		return {
 			category: 'Top',
-			title: 'Kaeru3',
+			title: 'dist | 公開用',
 			source_name: 'dist',
 			source_url: './preview.html#' + 'dist',
 		}

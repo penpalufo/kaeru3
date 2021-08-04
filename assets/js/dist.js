@@ -75,10 +75,10 @@ class preload_Game extends Phaser.Scene{
 
 	preload(){
 		console.log('preload_Game | preload()');
-		this.load.spritesheet('player',   './common/img/kaeru/kaeru.png', 	{ frameWidth: 120, frameHeight: 108 });
-		this.load.spritesheet('mizukusa', './common/img/kaeru/mizukusa.png',{ frameWidth: 158, frameHeight: 311 });
-		this.load.image('shadow', 	'./common/img/kaeru/shadow.png');
-		this.load.image('bear', 	'./common/img/animals/bear.png');
+		this.load.spritesheet('player',   './assets/img/kaeru/kaeru.png', 	{ frameWidth: 120, frameHeight: 108 });
+		this.load.spritesheet('mizukusa', './assets/img/kaeru/mizukusa.png',{ frameWidth: 158, frameHeight: 311 });
+		this.load.image('shadow', 	'./assets/img/kaeru/shadow.png');
+		this.load.image('bear', 	'./assets/img/animals/bear.png');
 	}
 
 

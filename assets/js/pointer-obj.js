@@ -1,5 +1,5 @@
 /*
- * pointer-obj.js
+ * btn.js
  */
 let game;	// ゲームインスタンス
 
@@ -73,7 +73,9 @@ class preload_Game extends Phaser.Scene{
 
 	preload(){
 		console.log('preload_Game | preload()');
-		this.load.spritesheet('player',   './common/img/kaeru/kaeru.png', 	{ frameWidth: 120, frameHeight: 108 });
+		this.load.spritesheet('player',   './assets/img/kaeru/kaeru.png', 	{ frameWidth: 120, frameHeight: 108 });
+		this.load.image('left', 	'./assets/img/ui/White/2x/left.png');
+		this.load.image('right', 	'./assets/img/ui/White/2x/right.png');
 	}
 
 
@@ -129,11 +131,10 @@ class play_Game extends Phaser.Scene{
 		this.player.anims.play("swim");
 
 		// -- プレイヤーをマウスに追従させる
-		this.input.on('pointermove', function (pointer){
-			//this.physics.moveToObject(this.player, pointer, 200);
-			let velocity =  pointer.x - this.player.x;
-			this.player.setVelocity(velocity);
+		this.input.on('pointermove', (pointer)=>{
+			this.physics.moveToObject(this.player, pointer, 200);
 		}, this);
+
 	}
 
 
@@ -141,8 +142,6 @@ class play_Game extends Phaser.Scene{
 	 * update
 	 */
 	update(){
-
-
 	}
 
 };

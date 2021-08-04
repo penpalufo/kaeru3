@@ -5,7 +5,7 @@
 	</article>
 
 	<article>
-		<h4>■ 左右ボタンで自機移動</h4>
+		<h4>■ {{ title }}</h4>
 		<p><a v-bind:href="source_url" target="_blank" class="btn btn-primary" role="button">preview : {{ source_name }}</a></p>
 
 <pre><code>create(){
@@ -36,7 +36,7 @@ module.exports = {
 	data: function() {
 		return {
 			category: 'Memo',
-			title: 'ボタンで自機移動',
+			title: 'btn | ボタンで自機移動',
 			source_name: 'btn',
 			source_url: './preview.html#' + 'btn',
 		}

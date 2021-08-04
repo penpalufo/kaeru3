@@ -73,9 +73,9 @@ class preload_Game extends Phaser.Scene{
 
 	preload(){
 		console.log('preload_Game | preload()');
-		this.load.spritesheet('player',   './common/img/kaeru/kaeru.png', 	{ frameWidth: 120, frameHeight: 108 });
-		this.load.image('left', 	'./common/img/ui/White/2x/left.png');
-		this.load.image('right', 	'./common/img/ui/White/2x/right.png');
+		this.load.spritesheet('player',   './assets/img/kaeru/kaeru.png', 	{ frameWidth: 120, frameHeight: 108 });
+		this.load.image('left', 	'./assets/img/ui/White/2x/left.png');
+		this.load.image('right', 	'./assets/img/ui/White/2x/right.png');
 
 	}
 
