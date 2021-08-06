@@ -12,6 +12,7 @@ const router = new VueRouter({
 		{ path: '/memo-pointer-obj.html', component: httpVueLoader('./vue/memo-pointer-obj.vue') },
 		{ path: '/memo-bootstrap.html', component: httpVueLoader('./vue/memo-bootstrap.vue') },
 		{ path: '/memo-minigame.html', component: httpVueLoader('./vue/memo-minigame.vue') },
+		{ path: '/memo-phaser.html', component: httpVueLoader('./vue/memo-phaser.vue') },
 	]
 });
 
