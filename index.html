@@ -33,8 +33,7 @@ https://penpalufo.github.io/kaeru3/
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.6.0/styles/railscasts.min.css">
 	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
 	<script>
-		hljs.configure({ tabReplace: '    ' }) // スペース4つ
-		//hljs.initHighlightingOnLoad();
+		hljs.configure({ tabReplace: '  ' }) // スペース4つ
 	</script>
 
 	<!-- CSS -->
@@ -70,31 +69,11 @@ https://penpalufo.github.io/kaeru3/
 				<div class="position-sticky pt-3">
 					<ul class="nav flex-column">
 
+						<!-- リンク -->
 						<li class="nav-item">
 							<a class="nav-link active" aria-current="page" href="https://github.com/penpalufo/kaeru3/" target="_blank">
 								<span data-feather="github"></span>
 								GitHub
-							</a>
-						</li>
-
-						<li class="nav-item">
-							<a class="nav-link active" aria-current="page" href="https://phaser.io/phaser3" target="_blank">
-								<span data-feather="arrow-up-right"></span>
-								Phaser3 official
-							</a>
-						</li>
-
-						<li class="nav-item">
-							<a class="nav-link active" aria-current="page" href="https://photonstorm.github.io/phaser3-docs/index.html" target="_blank">
-								<span data-feather="arrow-up-right"></span>
-								Phaser3 APIドキュメント
-							</a>
-						</li>
-
-						<li class="nav-item">
-							<a class="nav-link active" aria-current="page" href="https://rexrainbow.github.io/phaser3-rex-notes/docs/site/index.html" target="_blank">
-								<span data-feather="arrow-up-right"></span>
-								Phaser3 リファレンス（本家よりイイ）
 							</a>
 						</li>
 
@@ -105,8 +84,11 @@ https://penpalufo.github.io/kaeru3/
 							</a>
 						</li>
 
+
+
+						<!-- メモ -->
 						<li class="nav-item">
-							<router-link tag="a" to="/memo-bootstrap.html" class="nav-link"><span data-feather="file-text"></span>Bootstrapメモ</router-link>
+							<router-link tag="a" to="/memo-phaser.html" class="nav-link"><span data-feather="file-text"></span>Phaserメモ</router-link>
 						</li>
 
 						<li class="nav-item">
@@ -114,24 +96,26 @@ https://penpalufo.github.io/kaeru3/
 						</li>
 
 						<li class="nav-item">
-							<router-link tag="a" to="/memo-phaser.html" class="nav-link"><span data-feather="file-text"></span>Phaserメモ</router-link>
+							<router-link tag="a" to="/memo-bootstrap.html" class="nav-link"><span data-feather="file-text"></span>Bootstrapメモ</router-link>
 						</li>
 
-						<li class="nav-item">
-							<a class="nav-link" href="./"><span data-feather="home"></span>
-								Top
-							</a>
-						</li>
 
 					</ul>
 
 					<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-						<span>自機操作</span>
+						<span>Game</span>
 						<a class="link-secondary" href="#" aria-label="Add a new report">
 							<span data-feather="plus-circle"></span>
 						</a>
 					</h6>
 					<ul class="nav flex-column mb-2">
+
+						<li class="nav-item">
+							<a class="nav-link" href="./"><span data-feather="home"></span>
+								Top(Dist)
+							</a>
+						</li>
+
 						<li class="nav-item">
 							<router-link tag="a" to="/memo-btn.html" class="nav-link"><span data-feather="file-text"></span>ボタンで自機移動</router-link>
 						</li>

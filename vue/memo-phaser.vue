@@ -7,14 +7,29 @@
 	<article>
 		<h4>■ {{ title }}</h4>
 		<dl>
+			<dt>リファレンス</dt>
+				<dd><a href="https://phaser.io/phaser3" target="_blank">Phaser3 official</a></dd>
+				<dd><a href="https://photonstorm.github.io/phaser3-docs/index.html" target="_blank">Phaser3 APIドキュメント</a></dd>
+				<dd><a href="https://rexrainbow.github.io/phaser3-rex-notes/docs/site/index.html" target="_blank">Phaser3 リファレンス（本家よりイイ）</a></dd>
+			<dt>まずはココ</dt>
+				<dd><a href="https://naruhodo.repop.jp/phaser-3-memo/" target="_blank">Phaser 3での各種記述や変更点メモ</a></dd>
+				<dd><a href="https://qiita.com/gakuseikai/items/062d2c3d132bf430fcb9" target="_blank">Phaser3の豆知識（背景の画像がずっと横移動する方法）</a></dd>
+				<dd><a href="https://1-notes.com/phaser-3-group-codes/" target="_blank">Phaser 3 | group関連のサンプルコード集</a></dd>
+				<dd><a href="https://naosim.hatenablog.jp/entry/2018/10/17/075533" target="_blank">アクションRPG Day5 衝突</a></dd>
+				<dd><a href="https://gpnotes.hatenablog.jp/entry/2018/11/26/160756" target="_blank">Phaser 3 : ブロック崩しを作ってみる ④　Dataを使ってみる</a></dd>
+
 			<dt>動きに関しては</dt>
 				<dd><a href="https://labs.phaser.io/index.html?dir=physics/arcade/&q=" target="_blank">Physics/Arcade</a></dd>
 				<dd><a href="https://labs.phaser.io/index.html?dir=physics/matterjs/&q=" target="_blank">Physics/Matterjs</a></dd>
 				<dd><a href="https://labs.phaser.io/index.html?dir=transform/&q=" target="_blank">Transform(オブジェクトの変形や回転)</a></dd>
+			<dt>衝突の範囲指定</dt>
+				<dd><pre><code>this.スプライト.body.setSize(23, 23); // 衝突範囲</code></pre></dd>
+			<dt>アニメーションの現在のコマ番号</dt>
+				<dd><pre><code>アニメのオブジェクト.frame.name</code></pre></dd>
+			<dt>グループの作成とスプライトの追加</dt>
+				<dd><pre><code>this.grp_stones = this.physics.add.group();
+this.grp_stones.add(this.physics.add.sprite("stone"));</code></pre></dd>
 		</dl>
-
-<pre><code>
-</code></pre>
 
 	</article>
 	</div>
@@ -41,4 +56,7 @@ module.exports = {
 </script>
 
 <style scoped>
+	dt{
+		margin-top: 30px;
+	}
 </style>

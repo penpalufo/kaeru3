@@ -5,7 +5,7 @@
 let game;	// ゲームインスタンス
 
 let _opt = {
-	kaeruY: 100,
+	kaeruY: 200,
 }
 
 
@@ -33,9 +33,13 @@ window.onload = function() {
 		},
 		scene: [
 			preload_Game,
+			opening_Game,
 			play_Game
 		],
 		backgroundColor: "#32CAFD", // 背景色
+		render: {	// ピクセル処理を無効にしてアンチエイリアス
+			pixelArt: false
+		},
 	};
 
 	game = new Phaser.Game(config);
@@ -74,10 +78,13 @@ class preload_Game extends Phaser.Scene{
 
 	preload(){
 		console.log('preload_Game | preload()');
+
+		this.load.image('title', './assets/img/geme-title.png');
+		this.load.image('play', './assets/img/geme-play.png');
 		this.load.spritesheet('player', './assets/img/kaeru/kaeru.png',   { frameWidth: 120, frameHeight: 108 });
 		this.load.spritesheet('plant',  './assets/img/kaeru/mizukusa.png',{ frameWidth: 158, frameHeight: 311 });
+		this.load.spritesheet('stone',  './assets/img/kaeru/game-stone.png',{ frameWidth: 305, frameHeight: 350 });
 		this.load.image('shadow', './assets/img/kaeru/shadow.png');
-		this.load.image('rock',   './assets/img/jumperpack/Particles/particle_darkGrey.png');
 	}
 
 
@@ -91,7 +98,7 @@ class preload_Game extends Phaser.Scene{
 
 		// プレイヤーのアニメーション定義
 		this.anims.create({
-			key: "swim",
+			key: "anim_player",
 			frames: this.anims.generateFrameNumbers("player", { start: 0, end: 11 }),
 			frameRate: 8,
 			repeat: -1
@@ -99,14 +106,55 @@ class preload_Game extends Phaser.Scene{
 
 		// 水草のアニメーション定義
 		this.anims.create({
-			key: "yurayura",
+			key: "anim_plant",
 			frames: this.anims.generateFrameNumbers("plant", { start: 0, end: 47 }),
 			frameRate: 8,
 			repeat: -1
 		});
 
+		// 岩のアニメーション定義
+		this.anims.create({
+			key: "anim_stone",
+			frames: this.anims.generateFrameNumbers("stone", { start: 0, end: 9 }),
+			frameRate: 0.75,
+			repeat: -1
+		});
+
 		// メインのシーンへ
-		this.scene.start("play_Game");
+		this.scene.start("opening_Game");
+	}
+
+
+}
+
+
+
+/*
+ |
+ |
+ | << Scene : openinng_Game >>
+ |
+ |
+ */
+
+class opening_Game extends Phaser.Scene{
+
+	// コンストラクタ
+	constructor(){
+		super("opening_Game");
+	}
+
+	create(){
+		console.log('opening_Game | create()');
+
+		this.title = this.physics.add.sprite(187, 100, "title");
+		this.title.setScale(0.4);
+		this.btn_play = this.physics.add.sprite(187, 300, "play");
+		this.btn_play.setScale(0.4);
+
+		this.btn_play.setInteractive().on('pointerdown', ()=>{
+			this.scene.start("play_Game");
+		});
 	}
 
 
@@ -136,27 +184,72 @@ class play_Game extends Phaser.Scene{
 	create(){
 		console.log('play_Game | create()');
 
-		// -- 水草(plants)
+		/*
+		 * -- 水草(plants)
+		 */
 		this.plants = this.physics.add.group({
 			key: 'plant',
-			quantity: 10,
+			quantity: 2,
 		});
 
 		this.plants.children.iterate(function(child){
 			child.setX(_app.rnd(game.config.width, 0));
 			child.setY(_app.rnd(game.config.height, 0));
-			child.play('yurayura'); // アニメ再生
+			child.play('anim_plant'); // アニメ再生
 			child.setScale((_app.rnd(5, 0) + 5) * 0.1);
 	    });
+
+
+
+		/*
+		 * -- 岩グループ
+		 */
+		this.stone_num = 0;
+		this.stone_max_num = 10;
+		this.stone_counter = 0;
+
+		this.grp_stones = this.physics.add.group({
+			key: 'stone',
+			quantity: this.stone_max_num,	//数
+		});
+
+		// -- 岩の初期化
+		this.ini_stones = () => {
+
+			this.grp_stones.children.iterate(function(_child){
+				_child.setX(_app.rnd(game.config.width, 0));
+				_child.setY(game.config.height);
+				_child.setVelocityY(0);
+				_child.angle = _app.rnd(360, 0);
+				_child.setScale(0.5);
+				// _child.play('anim_stone'); // アニメ再生
+		    });
+		}
+
+		// -- 岩を増やす
+		this.add_stone = () => {
+			if (this.stone_num < this.stone_max_num){
+				this.grp_stones.children.entries[this.stone_num].setVelocityY(-100);
+				this.grp_stones.children.entries[this.stone_num].play('anim_stone'); // アニメ再生
+				this.stone_num ++;
+			}
+		}
+
+		this.ini_stones();
+		this.add_stone();
+
+
+		/*
+		 * -- プレイヤーのカエル
+		 */
+		this.player = this.physics.add.sprite(187, 333, "player");
+		this.player.anims.play("anim_player");
+		this.player.setScale(1.5);
+		this.player.body.setSize(23, 23); // 衝突範囲
 
 		// -- プレイヤーの衝突範囲用スプライト
 		this.shadow = this.physics.add.sprite(187, 333, "shadow");
 		this.shadow.setScale(0.35);
-
-		// -- プレイヤーのカエル
-		this.player = this.physics.add.sprite(187, 333, "player");
-		this.player.anims.play("swim");
-		this.player.setScale(0.75);
 
 		// -- プレイヤーをマウスに追従させる
 		this.input.on('pointermove', function (pointer){
@@ -164,38 +257,26 @@ class play_Game extends Phaser.Scene{
 			this.player.setVelocity(velocity);
 		}, this);
 
-		// -- 岩グループ定義
-		this.rocks = this.physics.add.group({
-			key: 'rock',
-			quantity: 10,
-			// bounceX: 1,
-			// bounceY: 1,
-			// collideWorldBounds: true,
-		});
 
-		// -- 岩の初期化
-		let ini_rocks = () => {
-			this.rocks.children.iterate(function(child){
-				child.setX(_app.rnd(game.config.width, 0));
-				child.setY(_app.rnd(game.config.height, 0) + game.config.height);
-				child.setVelocityY(_app.rnd(200, 50) * -1);
-				child.angle = _app.rnd(360, 0);
-				child.setScale(1.25);
-		    });
-		}
 
-		ini_rocks();
-
-		// -- 衝突
+		/*
+		 * -- 衝突
+		 */
 		this.physics.add.overlap(
-			this.shadow,
-			this.rocks,
-			function (player, rock){
-				console.log('衝突');
-				ini_rocks();		// 岩初期化
-				_opt.kaeruY += 30;	// 衝突したら１段下がる
+			//this.shadow,
+			this.player,
+			this.grp_stones,
+			function (player, stone){
+				console.log(stone.frame.name);
+				let n = stone.frame.name;
+				if (n >=3 && n <= 6){
+					console.log('当たり');
+					//this.ini_stones();		// 岩初期化
+					_opt.kaeruY += 30;	// 衝突したら１段下がる
+				}
 			}
 		);
+
 
 	}
 
@@ -216,7 +297,7 @@ class play_Game extends Phaser.Scene{
 		}
 
 		// 岩がステージから外れたら処理
-		this.rocks.getChildren().forEach(function(child){
+		this.grp_stones.getChildren().forEach(function(child){
 			if (child.y < -100){
 				child.y = game.config.height + 100;
 				child.angle = _app.rnd(360, 0);
@@ -226,6 +307,14 @@ class play_Game extends Phaser.Scene{
 		// 衝突判定用の影をプレイヤーと同じ位置に
 		this.shadow.x = this.player.x;
 		this.shadow.y = this.player.y;
+
+		// カウンターで岩を追加
+		this.stone_counter++;
+		if (this.stone_counter >= 1000){
+			this.add_stone();
+			this.stone_counter = 0;
+			console.log('増えた！');
+		}
 
 	}
 
