@@ -36,7 +36,7 @@ window.onload = function() {
 			opening_Game,
 			play_Game
 		],
-		backgroundColor: "#32CAFD", // 背景色
+		backgroundColor: "#8dd3ff", // 背景色
 		render: {	// ピクセル処理を無効にしてアンチエイリアス
 			pixelArt: false
 		},
@@ -83,7 +83,7 @@ class preload_Game extends Phaser.Scene{
 		this.load.image('play', './assets/img/geme-play.png');
 		this.load.spritesheet('player', './assets/img/kaeru/kaeru.png',   { frameWidth: 120, frameHeight: 108 });
 		this.load.spritesheet('plant',  './assets/img/kaeru/mizukusa.png',{ frameWidth: 158, frameHeight: 311 });
-		this.load.spritesheet('stone',  './assets/img/kaeru/game-stone.png',{ frameWidth: 305, frameHeight: 350 });
+		this.load.spritesheet('stone',  './assets/img/kaeru/game-stone-test.png',{ frameWidth: 305, frameHeight: 350 });
 		this.load.image('shadow', './assets/img/kaeru/shadow.png');
 	}
 
@@ -202,27 +202,26 @@ class play_Game extends Phaser.Scene{
 
 
 		/*
-		 * -- 岩グループ
+		 * -- 岩
 		 */
 		this.stone_num = 0;
 		this.stone_max_num = 10;
 		this.stone_counter = 0;
 
+		// -- 岩グループを作成
 		this.grp_stones = this.physics.add.group({
 			key: 'stone',
 			quantity: this.stone_max_num,	//数
 		});
 
-		// -- 岩の初期化
+		// -- 岩グループの初期化
 		this.ini_stones = () => {
 
 			this.grp_stones.children.iterate(function(_child){
 				_child.setX(_app.rnd(game.config.width, 0));
-				_child.setY(game.config.height);
-				_child.setVelocityY(0);
+				_child.setY(_app.rnd(game.config.height, 0) + game.config.height + 150);
 				_child.angle = _app.rnd(360, 0);
 				_child.setScale(0.5);
-				// _child.play('anim_stone'); // アニメ再生
 		    });
 		}
 
@@ -232,6 +231,7 @@ class play_Game extends Phaser.Scene{
 				this.grp_stones.children.entries[this.stone_num].setVelocityY(-100);
 				this.grp_stones.children.entries[this.stone_num].play('anim_stone'); // アニメ再生
 				this.stone_num ++;
+				alert('岩、追加！岩の数=' + this.stone_num + "\n岩の最大数=" + this.stone_max_num);
 			}
 		}
 
@@ -263,15 +263,14 @@ class play_Game extends Phaser.Scene{
 		 * -- 衝突
 		 */
 		this.physics.add.overlap(
-			//this.shadow,
 			this.player,
 			this.grp_stones,
-			function (player, stone){
+			(player, stone) => {
 				console.log(stone.frame.name);
 				let n = stone.frame.name;
 				if (n >=3 && n <= 6){
-					console.log('当たり');
-					//this.ini_stones();		// 岩初期化
+					alert('当たり！スプライトのコマ数=' + n + "\n当たりの範囲は3～6のコマ");
+					this.ini_stones();	// 岩初期化
 					_opt.kaeruY += 30;	// 衝突したら１段下がる
 				}
 			}
@@ -299,22 +298,21 @@ class play_Game extends Phaser.Scene{
 		// 岩がステージから外れたら処理
 		this.grp_stones.getChildren().forEach(function(child){
 			if (child.y < -100){
-				child.y = game.config.height + 100;
+				child.y = _app.rnd(game.config.height, 0) + game.config.height;
 				child.angle = _app.rnd(360, 0);
 			}
 		});
-
-		// 衝突判定用の影をプレイヤーと同じ位置に
-		this.shadow.x = this.player.x;
-		this.shadow.y = this.player.y;
 
 		// カウンターで岩を追加
 		this.stone_counter++;
 		if (this.stone_counter >= 1000){
 			this.add_stone();
 			this.stone_counter = 0;
-			console.log('増えた！');
 		}
+
+		// 衝突判定用の影をプレイヤーと同じ位置に
+		this.shadow.x = this.player.x;
+		this.shadow.y = this.player.y;
 
 	}
 
