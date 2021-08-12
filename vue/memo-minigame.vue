@@ -18,10 +18,8 @@
 			<dt><a href="https://sites.google.com/site/closetvx/" target="_blank">■ CLOSET</a></dt>
 			<dt><a href="https://qiita.com/TD12734/items/5dc8068732f94452efe2" target="_blank">■ 無料で使えるゲーム素材公開サイト まとめ</a></dt>
 			<dt><a href="https://kenney.nl/assets" target="_blank">■ Kenny（ココイイ！）</a></dt>
+			<dt><a href="https://www.illust-box.jp/">■ イラストボックス（penpal.pfm / ********IB）</a></dt>
 		</dl>
-
-<pre><code>
-</code></pre>
 
 	</article>
 	</div>

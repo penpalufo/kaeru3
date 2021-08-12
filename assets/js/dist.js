@@ -5,7 +5,7 @@
 let game;	// ゲームインスタンス
 
 let _opt = {
-	kaeruY: 200,
+	kaeruY: 300,
 }
 
 
@@ -85,6 +85,8 @@ class preload_Game extends Phaser.Scene{
 		this.load.spritesheet('plant',  './assets/img/kaeru/mizukusa.png',{ frameWidth: 158, frameHeight: 311 });
 		this.load.spritesheet('stone',  './assets/img/kaeru/game-stone-test.png',{ frameWidth: 305, frameHeight: 350 });
 		this.load.image('shadow', './assets/img/kaeru/shadow.png');
+		this.load.image('fish', './assets/img/kaeru/fish.png');
+		this.load.image('zari', './assets/img/kaeru/zari.png');
 	}
 
 
@@ -228,7 +230,7 @@ class play_Game extends Phaser.Scene{
 		// -- 岩を増やす
 		this.add_stone = () => {
 			if (this.stone_num < this.stone_max_num){
-				this.grp_stones.children.entries[this.stone_num].setVelocityY(-100);
+				this.grp_stones.children.entries[this.stone_num].setVelocityY(-50);
 				this.grp_stones.children.entries[this.stone_num].play('anim_stone'); // アニメ再生
 				this.stone_num ++;
 				alert('岩、追加！岩の数=' + this.stone_num + "\n岩の最大数=" + this.stone_max_num);
@@ -239,13 +241,50 @@ class play_Game extends Phaser.Scene{
 		this.add_stone();
 
 
+
+		/*
+		 * -- 魚(fish)
+		 */
+		this.fish_num = 0;
+		this.fish_max_num = 10;
+		this.fish_counter = 0;
+		this.grp_fish = this.physics.add.group({
+			key: 'fish',
+			quantity: this.fish_max_num,
+		});
+
+		// -- 魚グループの初期化
+		this.ini_grp_fish = () => {
+
+			this.grp_fish.children.iterate(function(_child){
+				_child.setX(_app.rnd(game.config.width, 0));
+				_child.setY((_app.rnd(game.config.height, 0) + 100) * -1);
+				_child.setScale(0.25);
+		    });
+		}
+
+		// -- 魚を増やす
+		this.add_fish = () => {
+			if (this.fish_num < this.fish_max_num){
+				this.grp_fish.children.entries[this.fish_num].setVelocityY(150);
+				// this.grp_fish.children.entries[this.fish_num].play('anim_stone'); // アニメ再生
+				this.fish_num ++;
+				alert('魚、追加！魚の数=' + this.fish_num + "\n魚の最大数=" + this.fish_max_num);
+			}
+		}
+
+		this.ini_grp_fish();
+		this.add_fish();
+
+
+
 		/*
 		 * -- プレイヤーのカエル
 		 */
 		this.player = this.physics.add.sprite(187, 333, "player");
 		this.player.anims.play("anim_player");
 		this.player.setScale(1.5);
-		this.player.body.setSize(23, 23); // 衝突範囲
+		this.player.body.setSize(40, 40); // 衝突範囲
 
 		// -- プレイヤーの衝突範囲用スプライト
 		this.shadow = this.physics.add.sprite(187, 333, "shadow");
@@ -260,19 +299,36 @@ class play_Game extends Phaser.Scene{
 
 
 		/*
-		 * -- 衝突
+		 * -- 岩との衝突
 		 */
 		this.physics.add.overlap(
-			this.player,
+			this.shadow,
 			this.grp_stones,
 			(player, stone) => {
 				console.log(stone.frame.name);
 				let n = stone.frame.name;
 				if (n >=3 && n <= 6){
 					alert('当たり！スプライトのコマ数=' + n + "\n当たりの範囲は3～6のコマ");
+					this.ini_grp_fish();// 魚初期化
 					this.ini_stones();	// 岩初期化
 					_opt.kaeruY += 30;	// 衝突したら１段下がる
 				}
+			}
+		);
+
+
+
+		/*
+		 * -- 魚との衝突
+		 */
+		this.physics.add.overlap(
+			this.player,
+			this.grp_fish,
+			(player, fish) => {
+				alert('当たり！魚');
+				this.ini_grp_fish();// 魚初期化
+				this.ini_stones();	// 岩初期化
+				_opt.kaeruY += 30;	// 衝突したら１段下がる
 			}
 		);
 
@@ -286,14 +342,21 @@ class play_Game extends Phaser.Scene{
 	 */
 	update(){
 
-		// プレイヤーのY位置を固定（もっとイイ方法あるはず）
-		this.player.y = _opt.kaeruY;
+		/*
+		 * プレイヤー
+		 */
+		this.player.y = _opt.kaeruY;	// プレイヤーのY位置を固定（もっとイイ方法あるはず）
 
 		// Playerとマウスポインタの距離
 		this.dist = Phaser.Math.Distance.BetweenPoints(this.player, this.input.activePointer);
 		if (this.dist < 10){
 			this.player.setVelocity(0);
 		}
+
+
+		/*
+		 * 岩
+		 */
 
 		// 岩がステージから外れたら処理
 		this.grp_stones.getChildren().forEach(function(child){
@@ -308,6 +371,25 @@ class play_Game extends Phaser.Scene{
 		if (this.stone_counter >= 1000){
 			this.add_stone();
 			this.stone_counter = 0;
+		}
+
+		/*
+		 * 魚
+		 */
+
+		// 魚がステージから外れたら処理
+		this.grp_fish.getChildren().forEach(function(child){
+			if (child.y > game.config.height + 100){
+				child.x = _app.rnd(game.config.width, 0);
+				child.y = _app.rnd(game.config.height, 0) * -1;
+			}
+		});
+
+		// カウンターで魚を追加
+		this.fish_counter++;
+		if (this.fish_counter >= 5000){
+			this.add_fish();
+			this.fish_counter = 0;
 		}
 
 		// 衝突判定用の影をプレイヤーと同じ位置に
