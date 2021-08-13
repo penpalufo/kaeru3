@@ -34,4 +34,17 @@ _app = {
 		return local;
 	},
 
+	transit_time: function(start){
+		const now = new Date();
+		let t = now.getTime() - start.getTime();	// 通算
+		const h = Math.floor(t / (60 * 60 * 1000));	// 時間
+		t = t - (h * 60 * 60 * 1000);
+		const m = Math.floor(t / (60 * 1000));		// 分
+		t = t-(m * 60 * 1000);
+		const s = Math.floor( t / 1000);			// 秒
+		const ms = t % 1000;						// ミリ秒
+
+		return h + ":" + m + ":" + s + ":" + ms;
+	}
+
 };

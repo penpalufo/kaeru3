@@ -186,6 +186,9 @@ class play_Game extends Phaser.Scene{
 	create(){
 		console.log('play_Game | create()');
 
+		// -- 開始時間
+		this.startTime = new Date();
+
 		/*
 		 * -- 水草(plants)
 		 */
@@ -297,8 +300,27 @@ class play_Game extends Phaser.Scene{
 		}, this);
 
 
+
+		/*
+		 * -- ゲームオーバー
+		 */
+
 		this.game_over = () => {
+
 			this.scene.pause();
+			/*
+			this.grp_fish.children.iterate(function(_child){
+				_child.setVelocity(0);
+			})
+
+			this.grp_stones.children.iterate(function(_child){
+				_child.setVelocity(0);
+			})
+			*/
+			this.tryagain = this.add.text(187, 550, 'TRY AGAIN').setFontSize(30).setFontFamily("Arial").setOrigin(0.5).setInteractive();
+			this.tryagain.on('pointerdown', (pointer) => {
+				this.tryagain.setText('OK!!');
+			}, this);
 		}
 
 
@@ -346,7 +368,14 @@ class play_Game extends Phaser.Scene{
 		 */
 		this.score_counter = 0
 		this.score = 0
-		this._score = this.add.text(5, 5, "0 m", {font: '30px Arial'})
+		this._score = this.add.text(10, 50, "0 m", {font: '30px Arial'})
+
+
+
+		/*
+		 * 経過時間定義
+		 */
+		this._timer = this.add.text(10, 10, "", {font: '30px Arial'})
 
 
 	}
@@ -423,6 +452,12 @@ class play_Game extends Phaser.Scene{
 			this._score.setText(this.score + " m")
 			//console.log('this.score = ' + this.score);
 		}
+
+
+		/*
+		 * 経過時間
+		 */
+		this._timer.setText('PLAY TIME ' + _app.transit_time(this.startTime));
 
 	}
 
