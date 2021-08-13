@@ -17,6 +17,9 @@
 				<dd><a href="https://1-notes.com/phaser-3-group-codes/" target="_blank">Phaser 3 | group関連のサンプルコード集</a></dd>
 				<dd><a href="https://naosim.hatenablog.jp/entry/2018/10/17/075533" target="_blank">アクションRPG Day5 衝突</a></dd>
 				<dd><a href="https://gpnotes.hatenablog.jp/entry/2018/11/26/160756" target="_blank">Phaser 3 : ブロック崩しを作ってみる ④　Dataを使ってみる</a></dd>
+				<dd><a href="https://1-notes.com/add-text-set-parameter/" target="_blank">Phaser 3 | テキストの各パラメータ一覧と指定方法</a></dd>
+				<dd><a href="https://mijinc0.github.io/blog/post/20200820_phaser3_about/" target="_blank">html5ゲームフレームワーク Phaser3</a></dd>
+				<dd><a href="https://qiita.com/41semicolon/items/0d2f2509d4ac1558badb" target="_blank">Phaser 3 でゲーム作成入門</a></dd>
 
 			<dt>動きに関しては</dt>
 				<dd><a href="https://labs.phaser.io/index.html?dir=physics/arcade/&q=" target="_blank">Physics/Arcade</a></dd>

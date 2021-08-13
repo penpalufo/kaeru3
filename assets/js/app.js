@@ -5,7 +5,7 @@ _app = {
 	 * ゲームの縦横比より横長なら横を短く、縦長なら縦を短く
 	 */
 
-	resize: function(){
+	resize: function(max_width, max_height){
 		let canvas = document.querySelector("canvas");
 		let windowWidth  = window.innerWidth;
 		let windowHeight = window.innerHeight;
@@ -13,9 +13,11 @@ _app = {
 		let gameRatio    = game.config.width / game.config.height;
 
 		if (windowRatio < gameRatio){
+			if (windowWidth > max_width) windowWidth = max_width;
 			canvas.style.width  = windowWidth + "px";
 			canvas.style.height = (windowWidth / gameRatio) + "px";
 		}else{
+			if (windowHeight > max_height) windowHeight = max_height;
 			canvas.style.width  = (windowHeight * gameRatio) + "px";
 			canvas.style.height = windowHeight + "px";
 		}

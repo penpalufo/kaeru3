@@ -48,7 +48,7 @@ window.onload = function() {
 	window.focus();
 
 	// ウィンドウサイズに合わせてキャンバスをリサイズ
-	_app.resize();
+	_app.resize(375, 667);
 
 	// リサイズイベントにresizeハンドラ登録
 	window.addEventListener("resize", _app.resize, false);
@@ -230,7 +230,7 @@ class play_Game extends Phaser.Scene{
 		// -- 岩を増やす
 		this.add_stone = () => {
 			if (this.stone_num < this.stone_max_num){
-				this.grp_stones.children.entries[this.stone_num].setVelocityY(-50);
+				this.grp_stones.children.entries[this.stone_num].setVelocityY(-75);
 				this.grp_stones.children.entries[this.stone_num].play('anim_stone'); // アニメ再生
 				this.stone_num ++;
 				alert('岩、追加！岩の数=' + this.stone_num + "\n岩の最大数=" + this.stone_max_num);
@@ -266,7 +266,7 @@ class play_Game extends Phaser.Scene{
 		// -- 魚を増やす
 		this.add_fish = () => {
 			if (this.fish_num < this.fish_max_num){
-				this.grp_fish.children.entries[this.fish_num].setVelocityY(150);
+				this.grp_fish.children.entries[this.fish_num].setVelocityY(175);
 				// this.grp_fish.children.entries[this.fish_num].play('anim_stone'); // アニメ再生
 				this.fish_num ++;
 				alert('魚、追加！魚の数=' + this.fish_num + "\n魚の最大数=" + this.fish_max_num);
@@ -297,6 +297,11 @@ class play_Game extends Phaser.Scene{
 		}, this);
 
 
+		this.game_over = () => {
+			this.scene.pause();
+		}
+
+
 
 		/*
 		 * -- 岩との衝突
@@ -309,9 +314,10 @@ class play_Game extends Phaser.Scene{
 				let n = stone.frame.name;
 				if (n >=3 && n <= 6){
 					alert('当たり！スプライトのコマ数=' + n + "\n当たりの範囲は3～6のコマ");
-					this.ini_grp_fish();// 魚初期化
-					this.ini_stones();	// 岩初期化
-					_opt.kaeruY += 30;	// 衝突したら１段下がる
+					this.game_over();
+					// this.ini_grp_fish();// 魚初期化
+					// this.ini_stones();	// 岩初期化
+					//_opt.kaeruY += 30;	// 衝突したら１段下がる
 				}
 			}
 		);
@@ -326,11 +332,21 @@ class play_Game extends Phaser.Scene{
 			this.grp_fish,
 			(player, fish) => {
 				alert('当たり！魚');
-				this.ini_grp_fish();// 魚初期化
-				this.ini_stones();	// 岩初期化
-				_opt.kaeruY += 30;	// 衝突したら１段下がる
+				this.game_over();
+				// this.ini_grp_fish();// 魚初期化
+				// this.ini_stones();	// 岩初期化
+				//_opt.kaeruY += 30;	// 衝突したら１段下がる
 			}
 		);
+
+
+
+		/*
+		 * スコア定義
+		 */
+		this.score_counter = 0
+		this.score = 0
+		this._score = this.add.text(5, 5, "0 m", {font: '30px Arial'})
 
 
 	}
@@ -395,6 +411,18 @@ class play_Game extends Phaser.Scene{
 		// 衝突判定用の影をプレイヤーと同じ位置に
 		this.shadow.x = this.player.x;
 		this.shadow.y = this.player.y;
+
+
+		/*
+		 * スコア
+		 */
+		this.score_counter++;
+		if (this.score_counter >= 50){
+			this.score++
+			this.score_counter = 0;
+			this._score.setText(this.score + " m")
+			//console.log('this.score = ' + this.score);
+		}
 
 	}
 
