@@ -92,7 +92,7 @@ class preload_Game extends Phaser.Scene{
 		this.load.image('play', './assets/img/geme-play.png');
 		this.load.spritesheet('player', './assets/img/kaeru/kaeru.png',   { frameWidth: 120, frameHeight: 108 });
 		this.load.spritesheet('plant',  './assets/img/kaeru/mizukusa.png',{ frameWidth: 158, frameHeight: 311 });
-		this.load.spritesheet('stone',  this.img_stone, { frameWidth: 305, frameHeight: 350 });
+		this.load.spritesheet('stone', this.img_stone, { frameWidth: 305, frameHeight: 350 });
 		this.load.image('shadow', './assets/img/kaeru/shadow.png');
 		this.load.image('fish', './assets/img/kaeru/fish.png');
 		this.load.image('zari', './assets/img/kaeru/zari.png');
@@ -301,7 +301,6 @@ class play_Game extends Phaser.Scene{
 		this.shadow.setScale(0.35);
 		this.shadow_depth = -1;
 		if (debug) this.shadow_depth = 0;
-		console.log('this.shadow_depth = ' + this.shadow_depth);
 		this.shadow.depth = this.shadow_depth;
 
 		// -- プレイヤーをマウスに追従させる

@@ -31,6 +31,11 @@ let _opt = {
 window.onload = function() {
 	console.log('window.onload');
 
+	let bgcolor = '#33CCFF';
+	if (debug){
+		bgcolor = '#8dd3ff';
+	}
+
 	let config = {
 		type: Phaser.AUTO,
 		width: 375,
@@ -47,7 +52,7 @@ window.onload = function() {
 			opening_Game,
 			play_Game
 		],
-		backgroundColor: "#8dd3ff", // 背景色
+		backgroundColor: bgcolor, // 背景色
 		render: {	// ピクセル処理を無効にしてアンチエイリアス
 			pixelArt: false
 		},
@@ -59,7 +64,7 @@ window.onload = function() {
 	window.focus();
 
 	// ウィンドウサイズに合わせてキャンバスをリサイズ
-	_app.resize();
+	_app.resize(375, 667);
 
 	// リサイズイベントにresizeハンドラ登録
 	window.addEventListener("resize", _app.resize, false);
@@ -75,7 +80,6 @@ window.onload = function() {
  |
  |
  */
-
 class preload_Game extends Phaser.Scene{
 
 	// コンストラクタ
@@ -90,11 +94,16 @@ class preload_Game extends Phaser.Scene{
 	preload(){
 		console.log('preload_Game | preload()');
 
+		this.img_stone = './assets/img/kaeru/game-stone.png';
+		if (debug){
+			this.img_stone = './assets/img/kaeru/game-stone-test.png';
+		}
+
 		this.load.image('title', './assets/img/geme-title.png');
 		this.load.image('play', './assets/img/geme-play.png');
 		this.load.spritesheet('player', './assets/img/kaeru/kaeru.png',   { frameWidth: 120, frameHeight: 108 });
 		this.load.spritesheet('plant',  './assets/img/kaeru/mizukusa.png',{ frameWidth: 158, frameHeight: 311 });
-		this.load.spritesheet('stone',  './assets/img/kaeru/game-stone-test.png',{ frameWidth: 305, frameHeight: 350 });
+		this.load.spritesheet('stone', this.img_stone, { frameWidth: 305, frameHeight: 350 });
 		this.load.image('shadow', './assets/img/kaeru/shadow.png');
 		this.load.image('fish', './assets/img/kaeru/fish.png');
 		this.load.image('zari', './assets/img/kaeru/zari.png');
@@ -149,7 +158,6 @@ class preload_Game extends Phaser.Scene{
  |
  |
  */
-
 class opening_Game extends Phaser.Scene{
 
 	// コンストラクタ
@@ -182,7 +190,6 @@ class opening_Game extends Phaser.Scene{
  |
  |
  */
-
 class play_Game extends Phaser.Scene{
 
 	// コンストラクタ
@@ -196,6 +203,9 @@ class play_Game extends Phaser.Scene{
 
 	create(){
 		console.log('play_Game | create()');
+
+		// -- 開始時間
+		this.startTime = new Date();
 
 		/*
 		 * -- 水草(plants)
@@ -241,10 +251,10 @@ class play_Game extends Phaser.Scene{
 		// -- 岩を増やす
 		this.add_stone = () => {
 			if (this.stone_num < this.stone_max_num){
-				this.grp_stones.children.entries[this.stone_num].setVelocityY(-50);
+				this.grp_stones.children.entries[this.stone_num].setVelocityY(-75);
 				this.grp_stones.children.entries[this.stone_num].play('anim_stone'); // アニメ再生
 				this.stone_num ++;
-				alert('岩、追加！岩の数=' + this.stone_num + "\n岩の最大数=" + this.stone_max_num);
+				if (debug) alert('岩、追加！岩の数=' + this.stone_num + "\n岩の最大数=" + this.stone_max_num);
 			}
 		}
 
@@ -277,10 +287,10 @@ class play_Game extends Phaser.Scene{
 		// -- 魚を増やす
 		this.add_fish = () => {
 			if (this.fish_num < this.fish_max_num){
-				this.grp_fish.children.entries[this.fish_num].setVelocityY(150);
+				this.grp_fish.children.entries[this.fish_num].setVelocityY(175);
 				// this.grp_fish.children.entries[this.fish_num].play('anim_stone'); // アニメ再生
 				this.fish_num ++;
-				alert('魚、追加！魚の数=' + this.fish_num + "\n魚の最大数=" + this.fish_max_num);
+				if (debug) alert('魚、追加！魚の数=' + this.fish_num + "\n魚の最大数=" + this.fish_max_num);
 			}
 		}
 
@@ -300,12 +310,39 @@ class play_Game extends Phaser.Scene{
 		// -- プレイヤーの衝突範囲用スプライト
 		this.shadow = this.physics.add.sprite(187, 333, "shadow");
 		this.shadow.setScale(0.35);
+		this.shadow_depth = -1;
+		if (debug) this.shadow_depth = 0;
+		this.shadow.depth = this.shadow_depth;
 
 		// -- プレイヤーをマウスに追従させる
 		this.input.on('pointermove', function (pointer){
 			let velocity =  pointer.x - this.player.x;
 			this.player.setVelocity(velocity);
 		}, this);
+
+
+
+		/*
+		 * -- ゲームオーバー
+		 */
+
+		this.game_over = () => {
+
+			this.scene.pause();
+			/*
+			this.grp_fish.children.iterate(function(_child){
+				_child.setVelocity(0);
+			})
+
+			this.grp_stones.children.iterate(function(_child){
+				_child.setVelocity(0);
+			})
+			*/
+			this.tryagain = this.add.text(187, 550, 'TRY AGAIN').setFontSize(30).setFontFamily("Arial").setOrigin(0.5).setInteractive();
+			this.tryagain.on('pointerdown', (pointer) => {
+				this.tryagain.setText('OK!!');
+			}, this);
+		}
 
 
 
@@ -320,9 +357,10 @@ class play_Game extends Phaser.Scene{
 				let n = stone.frame.name;
 				if (n >=3 && n <= 6){
 					alert('当たり！スプライトのコマ数=' + n + "\n当たりの範囲は3～6のコマ");
-					this.ini_grp_fish();// 魚初期化
-					this.ini_stones();	// 岩初期化
-					_opt.kaeruY += 30;	// 衝突したら１段下がる
+					this.game_over();
+					// this.ini_grp_fish();// 魚初期化
+					// this.ini_stones();	// 岩初期化
+					//_opt.kaeruY += 30;	// 衝突したら１段下がる
 				}
 			}
 		);
@@ -337,11 +375,28 @@ class play_Game extends Phaser.Scene{
 			this.grp_fish,
 			(player, fish) => {
 				alert('当たり！魚');
-				this.ini_grp_fish();// 魚初期化
-				this.ini_stones();	// 岩初期化
-				_opt.kaeruY += 30;	// 衝突したら１段下がる
+				this.game_over();
+				// this.ini_grp_fish();// 魚初期化
+				// this.ini_stones();	// 岩初期化
+				//_opt.kaeruY += 30;	// 衝突したら１段下がる
 			}
 		);
+
+
+
+		/*
+		 * スコア定義
+		 */
+		this.score_counter = 0
+		this.score = 0
+		this._score = this.add.text(10, 50, "0 m", {font: '30px Arial'})
+
+
+
+		/*
+		 * 経過時間定義
+		 */
+		this._timer = this.add.text(10, 10, "", {font: '30px Arial'})
 
 
 	}
@@ -406,6 +461,24 @@ class play_Game extends Phaser.Scene{
 		// 衝突判定用の影をプレイヤーと同じ位置に
 		this.shadow.x = this.player.x;
 		this.shadow.y = this.player.y;
+
+
+		/*
+		 * スコア
+		 */
+		this.score_counter++;
+		if (this.score_counter >= 50){
+			this.score++
+			this.score_counter = 0;
+			this._score.setText(this.score + " m")
+			//console.log('this.score = ' + this.score);
+		}
+
+
+		/*
+		 * 経過時間
+		 */
+		this._timer.setText('PLAY TIME ' + _app.transit_time(this.startTime));
 
 	}
 
