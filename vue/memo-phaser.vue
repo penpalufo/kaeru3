@@ -22,6 +22,7 @@
 				<dd><a href="https://qiita.com/41semicolon/items/0d2f2509d4ac1558badb" target="_blank">Phaser 3 でゲーム作成入門</a></dd>
 				<dd><a href="https://1-notes.com/add-text-set-touch-events/" target="_blank">Phaser 3 | テキストにクリックイベントを実装する方法</a></dd>
 				<dd><a href="https://qiita.com/r-ytakada/items/79456097c294fb49cf08" target="_blank">Phaserでブラウザゲー制作 Part.2 ジャンピングゲーム</a></dd>
+				<dd><a href="https://gpnotes.hatenablog.jp/entry/2019/01/16/170100" target="_blank">Phaser 3 : depthで重なり順の制御</a></dd>
 
 
 			<dt>動きに関しては</dt>

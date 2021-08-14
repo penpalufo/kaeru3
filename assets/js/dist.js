@@ -20,6 +20,11 @@ let _opt = {
 window.onload = function() {
 	console.log('window.onload');
 
+	let bgcolor = '#33CCFF';
+	if (debug){
+		bgcolor = '#8dd3ff';
+	}
+
 	let config = {
 		type: Phaser.AUTO,
 		width: 375,
@@ -36,7 +41,7 @@ window.onload = function() {
 			opening_Game,
 			play_Game
 		],
-		backgroundColor: "#8dd3ff", // 背景色
+		backgroundColor: bgcolor, // 背景色
 		render: {	// ピクセル処理を無効にしてアンチエイリアス
 			pixelArt: false
 		},
@@ -64,7 +69,6 @@ window.onload = function() {
  |
  |
  */
-
 class preload_Game extends Phaser.Scene{
 
 	// コンストラクタ
@@ -79,11 +83,16 @@ class preload_Game extends Phaser.Scene{
 	preload(){
 		console.log('preload_Game | preload()');
 
+		this.img_stone = './assets/img/kaeru/game-stone.png';
+		if (debug){
+			this.img_stone = './assets/img/kaeru/game-stone-test.png';
+		}
+
 		this.load.image('title', './assets/img/geme-title.png');
 		this.load.image('play', './assets/img/geme-play.png');
 		this.load.spritesheet('player', './assets/img/kaeru/kaeru.png',   { frameWidth: 120, frameHeight: 108 });
 		this.load.spritesheet('plant',  './assets/img/kaeru/mizukusa.png',{ frameWidth: 158, frameHeight: 311 });
-		this.load.spritesheet('stone',  './assets/img/kaeru/game-stone-test.png',{ frameWidth: 305, frameHeight: 350 });
+		this.load.spritesheet('stone',  this.img_stone, { frameWidth: 305, frameHeight: 350 });
 		this.load.image('shadow', './assets/img/kaeru/shadow.png');
 		this.load.image('fish', './assets/img/kaeru/fish.png');
 		this.load.image('zari', './assets/img/kaeru/zari.png');
@@ -138,7 +147,6 @@ class preload_Game extends Phaser.Scene{
  |
  |
  */
-
 class opening_Game extends Phaser.Scene{
 
 	// コンストラクタ
@@ -171,7 +179,6 @@ class opening_Game extends Phaser.Scene{
  |
  |
  */
-
 class play_Game extends Phaser.Scene{
 
 	// コンストラクタ
@@ -236,7 +243,7 @@ class play_Game extends Phaser.Scene{
 				this.grp_stones.children.entries[this.stone_num].setVelocityY(-75);
 				this.grp_stones.children.entries[this.stone_num].play('anim_stone'); // アニメ再生
 				this.stone_num ++;
-				alert('岩、追加！岩の数=' + this.stone_num + "\n岩の最大数=" + this.stone_max_num);
+				if (debug) alert('岩、追加！岩の数=' + this.stone_num + "\n岩の最大数=" + this.stone_max_num);
 			}
 		}
 
@@ -272,7 +279,7 @@ class play_Game extends Phaser.Scene{
 				this.grp_fish.children.entries[this.fish_num].setVelocityY(175);
 				// this.grp_fish.children.entries[this.fish_num].play('anim_stone'); // アニメ再生
 				this.fish_num ++;
-				alert('魚、追加！魚の数=' + this.fish_num + "\n魚の最大数=" + this.fish_max_num);
+				if (debug) alert('魚、追加！魚の数=' + this.fish_num + "\n魚の最大数=" + this.fish_max_num);
 			}
 		}
 
@@ -292,6 +299,10 @@ class play_Game extends Phaser.Scene{
 		// -- プレイヤーの衝突範囲用スプライト
 		this.shadow = this.physics.add.sprite(187, 333, "shadow");
 		this.shadow.setScale(0.35);
+		this.shadow_depth = -1;
+		if (debug) this.shadow_depth = 0;
+		console.log('this.shadow_depth = ' + this.shadow_depth);
+		this.shadow.depth = this.shadow_depth;
 
 		// -- プレイヤーをマウスに追従させる
 		this.input.on('pointermove', function (pointer){

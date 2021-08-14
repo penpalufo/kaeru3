@@ -13,6 +13,7 @@ const router = new VueRouter({
 		{ path: '/memo-bootstrap.html', component: httpVueLoader('./vue/memo-bootstrap.vue') },
 		{ path: '/memo-minigame.html', component: httpVueLoader('./vue/memo-minigame.vue') },
 		{ path: '/memo-phaser.html', component: httpVueLoader('./vue/memo-phaser.vue') },
+		{ path: '/memo-app.html', component: httpVueLoader('./vue/memo-app.vue') },
 	]
 });
 
