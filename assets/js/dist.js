@@ -89,13 +89,13 @@ class preload_Game extends Phaser.Scene{
 		}
 
 		this.load.image('title', './assets/img/geme-title.png');
-		this.load.image('play', './assets/img/geme-play.png');
 		this.load.spritesheet('player', './assets/img/kaeru/kaeru.png',   { frameWidth: 120, frameHeight: 108 });
 		this.load.spritesheet('plant',  './assets/img/kaeru/mizukusa.png',{ frameWidth: 158, frameHeight: 311 });
 		this.load.spritesheet('stone', this.img_stone, { frameWidth: 305, frameHeight: 350 });
 		this.load.image('shadow', './assets/img/kaeru/shadow.png');
 		this.load.image('fish', './assets/img/kaeru/fish.png');
 		this.load.image('zari', './assets/img/kaeru/zari.png');
+		this.load.image('dead', './assets/img/kaeru/kaeru-dead.png');
 	}
 
 
@@ -159,12 +159,25 @@ class opening_Game extends Phaser.Scene{
 
 		this.title = this.physics.add.sprite(187, 100, "title");
 		this.title.setScale(0.4);
-		this.btn_play = this.physics.add.sprite(187, 300, "play");
-		this.btn_play.setScale(0.4);
 
-		this.btn_play.setInteractive().on('pointerdown', ()=>{
-			this.scene.start("play_Game");
+		// this.btn_play = this.add.text(187, 550, 'PLAY').setFontSize(60).setFontFamily("Poppins").setFontStyle(100).setOrigin(0.5).setInteractive();
+		// this.btn_play.fontWeight='100';
+		this.btn_play = this.add.text(187, 550, 'PLAY', {
+			fill: '#fff',
+			font: '800 60px Poppins',
 		});
+		this.btn_play.setOrigin(0.5).setInteractive();
+
+		this.btn_play.on('pointerdown', (pointer) => {
+			this.scene.start("play_Game");
+		}, this);
+
+		/*
+		this.text1 = game.add.text(game.width / 2, 100, "Some Text Here");
+        this.text1.fill = "#ffffff";
+        this.text1.anchor.set(0.5, 0.5);
+        this.text1.font = "Fresca";
+        */
 	}
 
 
@@ -228,7 +241,6 @@ class play_Game extends Phaser.Scene{
 
 		// -- 岩グループの初期化
 		this.ini_stones = () => {
-
 			this.grp_stones.children.iterate(function(_child){
 				_child.setX(_app.rnd(game.config.width, 0));
 				_child.setY(_app.rnd(game.config.height, 0) + game.config.height + 150);
@@ -305,8 +317,10 @@ class play_Game extends Phaser.Scene{
 
 		// -- プレイヤーをマウスに追従させる
 		this.input.on('pointermove', function (pointer){
-			let velocity =  pointer.x - this.player.x;
-			this.player.setVelocity(velocity);
+			if (!this.pause){
+				let velocity =  pointer.x - this.player.x;
+				this.player.setVelocity(velocity);
+			}
 		}, this);
 
 
@@ -315,10 +329,9 @@ class play_Game extends Phaser.Scene{
 		 * -- ゲームオーバー
 		 */
 
+		this.pause = false;
 		this.game_over = () => {
 
-			this.scene.pause();
-			/*
 			this.grp_fish.children.iterate(function(_child){
 				_child.setVelocity(0);
 			})
@@ -326,11 +339,32 @@ class play_Game extends Phaser.Scene{
 			this.grp_stones.children.iterate(function(_child){
 				_child.setVelocity(0);
 			})
-			*/
-			this.tryagain = this.add.text(187, 550, 'TRY AGAIN').setFontSize(30).setFontFamily("Arial").setOrigin(0.5).setInteractive();
+
+			// deadに入れ替え
+			this.dead = this.physics.add.sprite(this.player.x, this.player.y, "dead");
+			this.dead.setScale(1.5);
+			this.player.y = -1000;
+			this.player.x = -1000;
+			this.player.setVelocity(0);
+			// this.player.destroy();
+
+			this.shadow.x = -1000;
+			this.shadow.y = -1000;
+
+			//this.tryagain = this.add.text(187, 550, 'TRY AGAIN').setFontSize(30).setFontFamily("Poppins").setOrigin(0.5).setInteractive();
+			this.tryagain = this.add.text(187, 550, 'TRY AGAIN', {
+				fill: '#fff',
+				font: '800 60px Poppins',
+			});
+			this.tryagain.setOrigin(0.5).setInteractive();
+
 			this.tryagain.on('pointerdown', (pointer) => {
 				this.tryagain.setText('OK!!');
 			}, this);
+
+			this.pause = true;
+
+			// this.scene.pause();
 		}
 
 
@@ -378,14 +412,26 @@ class play_Game extends Phaser.Scene{
 		 */
 		this.score_counter = 0
 		this.score = 0
-		this._score = this.add.text(10, 50, "0 m", {font: '30px Arial'})
+		//this._score = this.add.text(10, 50, "0 m", {font: '30px Arial'})
+
+		this._score = this.add.text(187, 50, '0 m', {
+			fill: '#fff',
+			font: '200 40px Poppins',
+		});
+		this._score.setOrigin(0.5);
 
 
 
 		/*
 		 * 経過時間定義
 		 */
-		this._timer = this.add.text(10, 10, "", {font: '30px Arial'})
+		// this._timer = this.add.text(10, 10, "", {font: '15px Arial'})
+
+		this._timer = this.add.text(187, 20, '', {
+			fill: '#fff',
+			font: '200 15px Poppins',
+		});
+		this._timer.setOrigin(0.5);
 
 
 	}
@@ -397,77 +443,80 @@ class play_Game extends Phaser.Scene{
 	 */
 	update(){
 
-		/*
-		 * プレイヤー
-		 */
-		this.player.y = _opt.kaeruY;	// プレイヤーのY位置を固定（もっとイイ方法あるはず）
+		if (!this.pause){
 
-		// Playerとマウスポインタの距離
-		this.dist = Phaser.Math.Distance.BetweenPoints(this.player, this.input.activePointer);
-		if (this.dist < 10){
-			this.player.setVelocity(0);
-		}
+			/*
+			 * プレイヤー
+			 */
+			this.player.y = _opt.kaeruY;	// プレイヤーのY位置を固定（もっとイイ方法あるはず）
 
-
-		/*
-		 * 岩
-		 */
-
-		// 岩がステージから外れたら処理
-		this.grp_stones.getChildren().forEach(function(child){
-			if (child.y < -100){
-				child.y = _app.rnd(game.config.height, 0) + game.config.height;
-				child.angle = _app.rnd(360, 0);
+			// Playerとマウスポインタの距離
+			this.dist = Phaser.Math.Distance.BetweenPoints(this.player, this.input.activePointer);
+			if (this.dist < 10){
+				this.player.setVelocity(0);
 			}
-		});
 
-		// カウンターで岩を追加
-		this.stone_counter++;
-		if (this.stone_counter >= 1000){
-			this.add_stone();
-			this.stone_counter = 0;
-		}
 
-		/*
-		 * 魚
-		 */
+			/*
+			 * 岩
+			 */
 
-		// 魚がステージから外れたら処理
-		this.grp_fish.getChildren().forEach(function(child){
-			if (child.y > game.config.height + 100){
-				child.x = _app.rnd(game.config.width, 0);
-				child.y = _app.rnd(game.config.height, 0) * -1;
+			// 岩がステージから外れたら処理
+			this.grp_stones.getChildren().forEach(function(child){
+				if (child.y < -100){
+					child.y = _app.rnd(game.config.height, 0) + game.config.height;
+					child.angle = _app.rnd(360, 0);
+				}
+			});
+
+			// カウンターで岩を追加
+			this.stone_counter++;
+			if (this.stone_counter >= 1000){
+				this.add_stone();
+				this.stone_counter = 0;
 			}
-		});
 
-		// カウンターで魚を追加
-		this.fish_counter++;
-		if (this.fish_counter >= 5000){
-			this.add_fish();
-			this.fish_counter = 0;
+			/*
+			 * 魚
+			 */
+
+			// 魚がステージから外れたら処理
+			this.grp_fish.getChildren().forEach(function(child){
+				if (child.y > game.config.height + 100){
+					child.x = _app.rnd(game.config.width, 0);
+					child.y = _app.rnd(game.config.height, 0) * -1;
+				}
+			});
+
+			// カウンターで魚を追加
+			this.fish_counter++;
+			if (this.fish_counter >= 5000){
+				this.add_fish();
+				this.fish_counter = 0;
+			}
+
+			// 衝突判定用の影をプレイヤーと同じ位置に
+			this.shadow.x = this.player.x;
+			this.shadow.y = this.player.y;
+
+
+			/*
+			 * スコア
+			 */
+			this.score_counter++;
+			if (this.score_counter >= 50){
+				this.score++
+				this.score_counter = 0;
+				this._score.setText(this.score + " m")
+				//console.log('this.score = ' + this.score);
+			}
+
+
+			/*
+			 * 経過時間
+			 */
+			this._timer.setText('PLAY TIME ' + _app.transit_time(this.startTime));
 		}
-
-		// 衝突判定用の影をプレイヤーと同じ位置に
-		this.shadow.x = this.player.x;
-		this.shadow.y = this.player.y;
-
-
-		/*
-		 * スコア
-		 */
-		this.score_counter++;
-		if (this.score_counter >= 50){
-			this.score++
-			this.score_counter = 0;
-			this._score.setText(this.score + " m")
-			//console.log('this.score = ' + this.score);
-		}
-
-
-		/*
-		 * 経過時間
-		 */
-		this._timer.setText('PLAY TIME ' + _app.transit_time(this.startTime));
 
 	}
 

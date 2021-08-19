@@ -15,7 +15,6 @@ var urlsToCache = [
 	'/kaeru3/assets/img/kaeru/game-stone.png',
 	'/kaeru3/assets/img/kaeru/game-stone-test.png',
 	'/kaeru3/assets/img/geme-title.png',
-	'/kaeru3/assets/img/geme-play.png',
 	'/kaeru3/assets/img/kaeru/kaeru.png',
 	'/kaeru3/assets/img/kaeru/mizukusa.png',
 	'/kaeru3/assets/img/kaeru/shadow.png',

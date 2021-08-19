@@ -24,6 +24,13 @@
 				<dd><a href="https://qiita.com/r-ytakada/items/79456097c294fb49cf08" target="_blank">Phaserでブラウザゲー制作 Part.2 ジャンピングゲーム</a></dd>
 				<dd><a href="https://gpnotes.hatenablog.jp/entry/2019/01/16/170100" target="_blank">Phaser 3 : depthで重なり順の制御</a></dd>
 
+				<dd><a href="https://phasergames.com/using-google-fonts-phaser/" target="_blank">★★PhaserでのGoogleFontsの使用</a></dd>
+				<dd><a href="https://rexrainbow.github.io/phaser3-rex-notes/docs/site/webfontloader/" target="_blank">Webfont loader</a></dd>
+				<dd><a href="https://codepen.io/rexrainbow/pen/vjqmXp" target="_blank">上のDEMO</a></dd>
+
+				<dd><a href="https://www.html5gamedevs.com/topic/32448-google-webfonts-weight-setting-in-phaser/" target="_blank">PhaserでのGoogleWebfontsの重み設定</a></dd>
+				<dd><a href="https://jsfiddle.net/sxspvhyk/2/" target="_blank">weightが設定できない問題はココみて解決</a></dd>
+
 
 			<dt>動きに関しては</dt>
 				<dd><a href="https://labs.phaser.io/index.html?dir=physics/arcade/&q=" target="_blank">Physics/Arcade</a></dd>
