@@ -7,20 +7,20 @@
 // キャッシュファイルの指定
 var CACHE_NAME = 'pwa-kaeru3-caches';
 var urlsToCache = [
-	'/kaeru3/',
-	'/kaeru3/pwa.html',
-	'/kaeru3/assets/css/game.css',
-	'/kaeru3/assets/js/app.js',
-	'/kaeru3/assets/js/dist.js',
-	'/kaeru3/assets/img/kaeru/game-stone.png',
-	'/kaeru3/assets/img/kaeru/game-stone-test.png',
-	'/kaeru3/assets/img/geme-title.png',
-	'/kaeru3/assets/img/geme-play.png',
-	'/kaeru3/assets/img/kaeru/kaeru.png',
-	'/kaeru3/assets/img/kaeru/mizukusa.png',
-	'/kaeru3/assets/img/kaeru/shadow.png',
-	'/kaeru3/assets/img/kaeru/fish.png',
-	'/kaeru3/assets/img/kaeru/zari.png',
+	'/phaser3/kaeru3/',
+	'/phaser3/kaeru3/pwa.html',
+	'/phaser3/kaeru3/assets/css/game.css',
+	'/phaser3/kaeru3/assets/js/app.js',
+	'/phaser3/kaeru3/assets/js/dist.js',
+	'/phaser3/kaeru3/assets/img/kaeru/game-stone.png',
+	'/phaser3/kaeru3/assets/img/kaeru/game-stone-test.png',
+	'/phaser3/kaeru3/assets/img/geme-title.png',
+	'/phaser3/kaeru3/assets/img/geme-play.png',
+	'/phaser3/kaeru3/assets/img/kaeru/kaeru.png',
+	'/phaser3/kaeru3/assets/img/kaeru/mizukusa.png',
+	'/phaser3/kaeru3/assets/img/kaeru/shadow.png',
+	'/phaser3/kaeru3/assets/img/kaeru/fish.png',
+	'/phaser3/kaeru3/assets/img/kaeru/zari.png',
 ];
 
 // インストール処理

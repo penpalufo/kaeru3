@@ -8,6 +8,7 @@
 		<h4>■ {{ title }}</h4>
 		<p><a v-bind:href="source_url" target="_blank" class="btn btn-primary" role="button">preview : {{ source_name }}</a></p>
 		<p><a v-bind:href="source_debug_url" target="_blank" class="btn btn-primary" role="button">preview : {{ source_debug_name }}</a></p>
+		<p><a v-bind:href="source_pwa_url" target="_blank" class="btn btn-primary" role="button">PWA : {{ source_pwa_name }}</a></p>
 
 <pre><code>/*
  * dist.js
@@ -501,6 +502,8 @@ module.exports = {
 			source_url: './preview.html#' + 'dist',
 			source_debug_name: 'dist(debug)',
 			source_debug_url: './preview.html#' + 'dist/debug',
+			source_pwa_name: 'dist',
+			source_pwa_url: './pwa.html#' + 'dist',
 		}
 	},
 	created: function(){

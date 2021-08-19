@@ -11,18 +11,24 @@
 		<!-- js -->
 		<script src="./assets/js/app.js"></script>
 		<script src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
-		<script src="./assets/js/preview.js"></script>
 		<script src="./assets/js/dist.js"></script>
 		<script>
-			const ver = '3.1.8';
+			const ver = '変更20';
+			const debug = false;
 			console.log('ver : ' + ver);
+
+			// -- ローカルか？
+			var isLocal = '';
+			if (document.domain == 'localhost'){
+				isLocal = '_local';
+			}
 		</script>
 
 		<!-- pwa -->
 		<link rel="manifest" href="./manifest.json">
 		<script>
 			if ('serviceWorker' in navigator) {
-				navigator.serviceWorker.register('./service_worker.js').then(function(registration) {
+				navigator.serviceWorker.register('./service_worker' + isLocal + '.js').then(function(registration) {
 					console.log('ServiceWorker registration successful with scope: ', registration.scope);
 				}).catch(function(err) {
 					console.log('ServiceWorker registration failed: ', err);
