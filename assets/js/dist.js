@@ -4,8 +4,11 @@
 
 let game;	// ゲームインスタンス
 
+const ver = '3.1.8';
+
 let _opt = {
 	kaeruY: 300,
+	water_power: -75,	// 水流
 }
 
 
@@ -160,8 +163,6 @@ class opening_Game extends Phaser.Scene{
 		this.title = this.physics.add.sprite(187, 100, "title");
 		this.title.setScale(0.4);
 
-		// this.btn_play = this.add.text(187, 550, 'PLAY').setFontSize(60).setFontFamily("Poppins").setFontStyle(100).setOrigin(0.5).setInteractive();
-		// this.btn_play.fontWeight='100';
 		this.btn_play = this.add.text(187, 550, 'PLAY', {
 			fill: '#fff',
 			font: '800 60px Poppins',
@@ -172,12 +173,6 @@ class opening_Game extends Phaser.Scene{
 			this.scene.start("play_Game");
 		}, this);
 
-		/*
-		this.text1 = game.add.text(game.width / 2, 100, "Some Text Here");
-        this.text1.fill = "#ffffff";
-        this.text1.anchor.set(0.5, 0.5);
-        this.text1.font = "Fresca";
-        */
 	}
 
 
@@ -212,26 +207,37 @@ class play_Game extends Phaser.Scene{
 		/*
 		 * -- 水草(plants)
 		 */
-		this.plants = this.physics.add.group({
+		this.grp_plants = this.physics.add.group({
 			key: 'plant',
 			quantity: 2,
 		});
 
-		this.plants.children.iterate(function(child){
-			child.setX(_app.rnd(game.config.width, 0));
-			child.setY(_app.rnd(game.config.height, 0));
-			child.play('anim_plant'); // アニメ再生
-			child.setScale((_app.rnd(5, 0) + 5) * 0.1);
-	    });
+		let plant_count = 0
+		this.grp_plants.children.iterate(function(child){
+			console.log(plant_count);
+			plant_count++
+			if ((plant_count + 1) % 2 !== 0 ){
+				// 左
+				child.setX(20)
+				child.setFlipX(true)
+			}else{
+				// 右
+				child.setX(game.config.width)
+			}
 
+			child.setY(_app.rnd(game.config.height, 0))
+			child.play('anim_plant') // アニメ再生
+			child.setScale((_app.rnd(5, 0) + 5) * 0.1)
+			child.setVelocityY(_opt.water_power);
+	    });
 
 
 		/*
 		 * -- 岩
 		 */
-		this.stone_num = 0;
-		this.stone_max_num = 10;
-		this.stone_counter = 0;
+		this.stone_num = 0
+		this.stone_max_num = 10
+		this.stone_counter = 0
 
 		// -- 岩グループを作成
 		this.grp_stones = this.physics.add.group({
@@ -242,17 +248,17 @@ class play_Game extends Phaser.Scene{
 		// -- 岩グループの初期化
 		this.ini_stones = () => {
 			this.grp_stones.children.iterate(function(_child){
-				_child.setX(_app.rnd(game.config.width, 0));
-				_child.setY(_app.rnd(game.config.height, 0) + game.config.height + 150);
-				_child.angle = _app.rnd(360, 0);
-				_child.setScale(0.5);
+				_child.setX(_app.rnd(game.config.width, 0))
+				_child.setY(_app.rnd(game.config.height, 0) + game.config.height + 150)
+				_child.angle = _app.rnd(360, 0)
+				_child.setScale(0.5)
 		    });
 		}
 
 		// -- 岩を増やす
 		this.add_stone = () => {
 			if (this.stone_num < this.stone_max_num){
-				this.grp_stones.children.entries[this.stone_num].setVelocityY(-75);
+				this.grp_stones.children.entries[this.stone_num].setVelocityY(_opt.water_power);
 				this.grp_stones.children.entries[this.stone_num].play('anim_stone'); // アニメ再生
 				this.stone_num ++;
 				if (debug) alert('岩、追加！岩の数=' + this.stone_num + "\n岩の最大数=" + this.stone_max_num);
@@ -321,7 +327,7 @@ class play_Game extends Phaser.Scene{
 				let velocity =  pointer.x - this.player.x;
 				this.player.setVelocity(velocity);
 			}
-		}, this);
+		}, this)
 
 
 
@@ -351,7 +357,6 @@ class play_Game extends Phaser.Scene{
 			this.shadow.x = -1000;
 			this.shadow.y = -1000;
 
-			//this.tryagain = this.add.text(187, 550, 'TRY AGAIN').setFontSize(30).setFontFamily("Poppins").setOrigin(0.5).setInteractive();
 			this.tryagain = this.add.text(187, 550, 'TRY AGAIN', {
 				fill: '#fff',
 				font: '800 60px Poppins',
@@ -386,7 +391,7 @@ class play_Game extends Phaser.Scene{
 					//_opt.kaeruY += 30;	// 衝突したら１段下がる
 				}
 			}
-		);
+		)
 
 
 
@@ -397,13 +402,13 @@ class play_Game extends Phaser.Scene{
 			this.player,
 			this.grp_fish,
 			(player, fish) => {
-				alert('当たり！魚');
-				this.game_over();
+				alert('当たり！魚')
+				this.game_over()
 				// this.ini_grp_fish();// 魚初期化
 				// this.ini_stones();	// 岩初期化
 				//_opt.kaeruY += 30;	// 衝突したら１段下がる
 			}
-		);
+		)
 
 
 
@@ -412,26 +417,23 @@ class play_Game extends Phaser.Scene{
 		 */
 		this.score_counter = 0
 		this.score = 0
-		//this._score = this.add.text(10, 50, "0 m", {font: '30px Arial'})
 
 		this._score = this.add.text(187, 50, '0 m', {
 			fill: '#fff',
 			font: '200 40px Poppins',
 		});
-		this._score.setOrigin(0.5);
+		this._score.setOrigin(0.5)
 
 
 
 		/*
 		 * 経過時間定義
 		 */
-		// this._timer = this.add.text(10, 10, "", {font: '15px Arial'})
-
 		this._timer = this.add.text(187, 20, '', {
 			fill: '#fff',
 			font: '200 15px Poppins',
 		});
-		this._timer.setOrigin(0.5);
+		this._timer.setOrigin(0.5)
 
 
 	}
@@ -494,6 +496,17 @@ class play_Game extends Phaser.Scene{
 				this.add_fish();
 				this.fish_counter = 0;
 			}
+
+			/*
+			 * 水草
+			 */
+
+			// 水草がステージから外れたら処理
+			this.grp_plants.getChildren().forEach(function(child){
+				if (child.y < -100){
+					child.y = _app.rnd(game.config.height, 0) + game.config.height;
+				}
+			});
 
 			// 衝突判定用の影をプレイヤーと同じ位置に
 			this.shadow.x = this.player.x;

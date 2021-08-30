@@ -65,9 +65,10 @@ _app = {
 		const m = Math.floor(t / (60 * 1000));		// 分
 		t = t-(m * 60 * 1000);
 		const s = Math.floor( t / 1000);			// 秒
-		const ms = t % 1000;						// ミリ秒
 
-		return h + ":" + m + ":" + s + ":" + ms;
+		//const ms = t % 1000;						// ミリ秒
+		//return h + ":" + m + ":" + s + ":" + ms;
+		return h + ":" + m + ":" + s;
 	}
 
 };
