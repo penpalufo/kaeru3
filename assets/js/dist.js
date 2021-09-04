@@ -1,5 +1,5 @@
 /*
- * dist.js
+ * dist.js(更新)
  */
 
 let game;	// ゲームインスタンス
