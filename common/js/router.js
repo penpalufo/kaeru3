@@ -20,5 +20,10 @@ const router = new VueRouter({
 
 const app = new Vue({
 	el: "#app",
+	data: function() {
+		return {
+			global_test: "*** OK !!! ***",
+		}
+	},
 	router
 });
